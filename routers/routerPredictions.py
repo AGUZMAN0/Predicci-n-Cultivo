@@ -6,7 +6,7 @@ from interfaces import DataCultivo
 
 router=APIRouter()
 
-with open("cultivo_recomendado.pkl", "rb")as file:
+with open("svcPredict2.pkl", "rb")as file:
     model=pickle.load(file)
 
 
