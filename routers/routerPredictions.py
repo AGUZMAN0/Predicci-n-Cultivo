@@ -1,38 +1,35 @@
 import pickle
 from fastapi import APIRouter
 import numpy as np
-from interfaces import DataDiabetes
+from interfaces import DataCultivo
 
 
 router=APIRouter()
 
-with open("RFDiabetesv132.pkl", "rb")as file:
+with open("cultivo_recomendado.pkl", "rb")as file:
     model=pickle.load(file)
 
 
-label = ['Pesona Enferma', 'Persona Sana']
 
-
-
-@router.post("/predict")
-def predict(data:DataDiabetes):
+@router.post("/Cultivo")
+def predict(data:DataCultivo):
     data = data.model_dump()
-    
-    Pregnancies=data["Pregnancies"]
-    Glucose=data["Glucose"]
-    BloodPressure=data["BloodPressure"]
-    SkinThickness=data["SkinThickness"]
-    Insulin=data["Insulin"]
-    BMI=data["BMI"]
-    DiabetesPedigreeFunction=data["DiabetesPedigreeFunction"]
-    Age=data["Age"]
 
-    xin = np.array([Pregnancies,Glucose,
-                    BloodPressure,SkinThickness,
-                    Insulin,BMI,DiabetesPedigreeFunction,Age]).reshape(1,8)
+    N=data["N"]
+    P=data["P"]
+    K=data["K"]
+    temperature=data["temperature"]
+    humidity=data["humidity"]
+    ph=data["ph"]
+    rainfall=data["rainfall"]
+
+
+    xin = np.array([N,P,
+                    K,temperature,
+                    humidity,ph,rainfall]).reshape(1,7)
     
     prediction = model.predict(xin)
 
    
-    print("prediction",label[prediction[0]])
-    return{"prediction": label[prediction[0]]}
+    print("prediction","LISTO")
+    return{"prediction": prediction[0]}
